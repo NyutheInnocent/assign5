@@ -1,5 +1,6 @@
 package assign5.ast;
 
+import assign5.lexer.*;
 import assign5.visitor.*;
 
 //////////////////////////////////
@@ -11,11 +12,13 @@ import assign5.visitor.*;
  */
 public class WhileStatementNode extends StatementNode {
     
-    public boolean bool;
+    public Word bool; 
+    public IdentifierNode id1;
+    public IdentifierNode id2;
     public StatementNode stmt;
 
     public WhileStatementNode() { }
-    public WhileStatementNode(boolean bool, StatementNode stmt) {
+    public WhileStatementNode(Word bool, StatementNode stmt) {
         this.bool = bool;
         this.stmt = stmt;
     }

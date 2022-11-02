@@ -83,14 +83,14 @@ public class Lexer {
                 if (readChar('=')) {
                     return Word.Le;
                 } else {
-                    return new Token('<');
+                    return Word.Lt;
                 }
             }
             case '>': {
                 if (readChar('=')) {
                     return Word.Ge;
                 } else {
-                    return new Token('>');
+                    return Word.Gt;
                 }
             }
         }

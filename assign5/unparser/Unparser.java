@@ -124,8 +124,23 @@ public class Unparser extends ASTVisitor {
 
     public void visit(IfStatementNode n) {
         printIndent();
-        println("if (" + n.bool + ")");
-        write("");
+        print("if (");
+        write("if (");
+        if (n.id1 != null) {
+            indentUp();
+            n.id1.accept(this);
+            indentDown();
+        }
+        print(" " + n.bool.lexeme + " ");
+        write(" " + n.bool.lexeme + " ");
+        if (n.id2 != null) {
+            indentUp();
+            n.id2.accept(this);
+            indentDown();
+        }
+
+        println(")");
+        write(")");
         
         indentUp();
         n.stmt.accept(this);
@@ -144,14 +159,48 @@ public class Unparser extends ASTVisitor {
 
     public void visit(WhileStatementNode n) {
         printIndent();
+        print("while (");
+        write("while (");
+        if (n.id1 != null) {
+            indentUp();
+            n.id1.accept(this);
+            indentDown();
+        }
+        print(" " + n.bool.lexeme + " ");
+        write(" " + n.bool.lexeme + " ");
+        if (n.id2 != null) {
+            indentUp();
+            n.id2.accept(this);
+            indentDown();
+        }
+        
+
+        if (n.stmt != null) {
+            println(")");
+            write(")");
+            indentUp();
+            n.stmt.accept(this);
+            indentDown();
+        } else {
+            println(") ;");
+            write(") ;");
+        }
     }
 
     public void visit(DoWhileStatementNode n) {
         printIndent();
+        println("do");
+        write("do");
+
+        indentUp();
+        n.stmt.accept(this);
+        indentDown();
     }
 
     public void visit(BreakStatementNode n) {
         printIndent();
+        println("break ;");
+        write("break ;");
     }
 
     public void visit(TypeNode n) {

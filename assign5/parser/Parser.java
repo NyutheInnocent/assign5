@@ -276,12 +276,27 @@ public class Parser extends ASTVisitor {
     public void visit(IfStatementNode n) {
         match(Tag.IF);
         match('(');
-        if (lookahead.tag == Tag.TRUE || lookahead.tag == Tag.FALSE) {
-            n.bool = Boolean.getBoolean(lookahead.toString());
+        
+        if (lookahead.tag == Tag.ID) {
+            n.id1 = new IdentifierNode();
+            level++;
+            n.id1.accept(this);
+            level--;
+
+            n.bool = ((Word)lookahead);
+            match(lookahead.tag);
+
+            n.id2 = new IdentifierNode();
+            level++;
+            n.id2.accept(this);
+            level--;
+        } else if (lookahead.tag == Tag.TRUE || lookahead.tag == Tag.FALSE) {
+            n.bool = ((Word)lookahead);
             match(lookahead.tag);
         } else {
             System.out.println("Error: Expected bool value in If statment but got ->" + lookahead.toString());
         }
+
         match(')');
         
         n.stmt = new StatementNode();
@@ -302,13 +317,33 @@ public class Parser extends ASTVisitor {
     public void visit(WhileStatementNode n) {
         match(Tag.WHILE);
         match('(');
-        if (lookahead.tag == Tag.TRUE || lookahead.tag == Tag.FALSE) {
-            n.bool = Boolean.getBoolean(lookahead.toString());
+
+        if (lookahead.tag == Tag.ID) {
+            n.id1 = new IdentifierNode();
+            level++;
+            n.id1.accept(this);
+            level--;
+
+            n.bool = ((Word)lookahead);
+            match(lookahead.tag);
+
+            n.id2 = new IdentifierNode();
+            level++;
+            n.id2.accept(this);
+            level--;
+        } else if (lookahead.tag == Tag.TRUE || lookahead.tag == Tag.FALSE) {
+            n.bool = ((Word)lookahead);
             match(lookahead.tag);
         } else {
             System.out.println("Error: Expected bool value in If statment but got ->" + lookahead.toString());
         }
+    
         match(')');
+        
+        if (lookahead.tag == ';') {
+            match(';');
+            return;
+        }
 
         n.stmt = new StatementNode();
         level++;
@@ -323,11 +358,10 @@ public class Parser extends ASTVisitor {
         level++;
         n.stmt.accept(this);
         level--;
-
-        
     }
 
     public void visit(BreakStatementNode n) {
+        printIndentation();
         match(Tag.BREAK);
         match(';');
     }

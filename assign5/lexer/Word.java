@@ -14,13 +14,16 @@ public class Word extends Token {
     public static final Word Else = new Word("else", Tag.ELSE);
     public static final Word Break = new Word("break", Tag.BREAK);
 
-
     public static final Word And = new Word("&&", Tag.AND);
     public static final Word Or = new Word("||", Tag.OR);
     public static final Word Eq = new Word("==", Tag.EQ);
     public static final Word Ne = new Word("!=", Tag.NE);
     public static final Word Le = new Word("<=", Tag.LE);
     public static final Word Ge = new Word(">=", Tag.GE);
+
+    public static final Word Lt = new Word("<", Tag.LT);
+    public static final Word Gt = new Word(">", Tag.GT);
+
     public static final Word Minus = new Word("minus", Tag.MINUS);
     public static final Word Temp = new Word("t", Tag.TEMP);
 

@@ -94,7 +94,7 @@ public class TreePrinter extends ASTVisitor{
 
     public void visit(IfStatementNode n) {
         printIndent(indent);
-        println("IfStatementNode: " + n.bool);
+        println("IfStatementNode: " + n.bool.lexeme);
         
         indentUp();
         n.stmt.accept(this);
@@ -112,15 +112,32 @@ public class TreePrinter extends ASTVisitor{
 
     public void visit(WhileStatementNode n) {
         printIndent(indent);
-        println("WhileStatementNode");
+        println("WhileStatementNode: " + n.bool.lexeme);
 
-        indentUp();
-        n.stmt.accept(this);
-        indentDown();
+        if (n.id1 != null && n.id2 != null) {
+            indentUp();
+            n.id1.accept(this);
+            indentDown();
+
+            indentUp();
+            n.id2.accept(this);
+            indentDown();
+        }
+
+        if (n.stmt != null) {
+            indentUp();
+            n.stmt.accept(this);
+            indentDown();
+        }
     }
 
     public void visit(DoWhileStatementNode n) {
         printIndent(indent);
+        println("DoWhileStatementNode");
+
+        indentUp();
+        n.stmt.accept(this);
+        indentDown();
     }
 
     public void visit(BreakStatementNode n) {

@@ -28,4 +28,6 @@ public class Tag {
     public static final int GE = 371;
     public static final int MINUS = 372;
     public static final int TEMP = 373;
+    public static final int LT = 374;
+    public static final int GT = 375;
 }
