@@ -10,6 +10,8 @@ public class IdentifierNode extends Node {
     public String id;
     public Word w;
 
+    public ArrayTypeNode array = null;
+
     public IdentifierNode() { }
     public IdentifierNode(Word w) {
         this.id = w.lexeme;

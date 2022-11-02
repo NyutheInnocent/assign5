@@ -6,6 +6,7 @@ public class ArrayTypeNode extends TypeNode{
     
     public TypeNode type; // Array of type
     public int size = 1; // Number of elements (size of array)
+    public IdentifierNode id;
 
     public ArrayTypeNode() { }
     public ArrayTypeNode(int size, TypeNode type) {

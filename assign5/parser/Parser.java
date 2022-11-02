@@ -244,6 +244,7 @@ public class Parser extends ASTVisitor {
             ((FloatNode)rhs_assign).accept(this);
             level--;
         }
+        // else if (lookahead.tag == Tag.)
 
         // a = b + c;
         if (lookahead.tag == ';') { // e.g. a = 19;
@@ -398,11 +399,21 @@ public class Parser extends ASTVisitor {
 
         match('[');
 
-        // n.size = Integer.parseInt(lookahead.toString()) ;
-        n.size = ((Int)lookahead).value;
-
-        printIndentation();
-        println("Array Dimension: " + ((Int)lookahead).value);
+        // Size could be ID or integer...
+        if (lookahead.tag == Tag.INT) {
+            n.size = ((Int)lookahead).value;
+            printIndentation();
+            println("Array Dimension: " + ((Int)lookahead).value);
+            match(Tag.INT);
+        }
+        else if (lookahead.tag == Tag.ID) {
+            n.id = new IdentifierNode();
+            level++;
+            n.id.accept(this);
+            level--;
+            printIndentation();
+            println("Array Dimension: " + n.id.id);
+        }
 
         // num between '[' and ']' is a IntNode
         // Do I have to visit IntNode?
@@ -410,7 +421,6 @@ public class Parser extends ASTVisitor {
         // For int[2],
         // ArrayTypeNode(2, null) vs. ArrayTypeNode(IntNode(), null)
 
-        match(Tag.INT);
         match(']');
 
         if (lookahead.toString().equals("[")) {
@@ -443,6 +453,13 @@ public class Parser extends ASTVisitor {
         n.id = lookahead.toString();
 
         match(Tag.ID);
+
+        if (lookahead.tag == '[') {
+            n.array = new ArrayTypeNode();
+            level++;
+            n.array.accept(this);
+            level--;
+        }
         
         // printIndentation();
         // n.printNode();

@@ -214,8 +214,10 @@ public class Unparser extends ASTVisitor {
     }
 
     public void visit(ArrayTypeNode n) {
-        print("[" + n.size + "]");
-        write("[" + n.size + "]");
+        
+
+        print("[" + (n.id != null ? n.id.id : n.size) + "]");
+        write("[" + (n.id != null ? n.id.id : n.size) + "]");
 
         if (n.type != null) {
             n.type.accept(this);
@@ -236,6 +238,10 @@ public class Unparser extends ASTVisitor {
         // Leaf node
         print(n.id);
         write(n.id);
+
+        if (n.array != null) {
+            n.array.accept(this);
+        }
     }
 
     /////////////////////
