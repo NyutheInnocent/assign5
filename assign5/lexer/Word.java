@@ -11,7 +11,9 @@ public class Word extends Token {
     public static final Word While = new Word("while", Tag.WHILE);
     public static final Word Do = new Word("do", Tag.DO);
     public static final Word If = new Word("if", Tag.IF);
+    public static final Word Else = new Word("else", Tag.ELSE);
     public static final Word Break = new Word("break", Tag.BREAK);
+
 
     public static final Word And = new Word("&&", Tag.AND);
     public static final Word Or = new Word("||", Tag.OR);

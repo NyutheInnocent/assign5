@@ -45,17 +45,23 @@ public class Unparser extends ASTVisitor {
     }
 
     public void visit(BlockStatementNode n) {
+        printIndent();
         println("{");
         write("{", true);
 
-        indentUp();
-        n.decls.accept(this);
-        indentDown();
+        if (n.decls != null) {
+            indentUp();
+            n.decls.accept(this);
+            indentDown();
+        }
 
-        indentUp();
-        n.stmts.accept(this);
-        indentDown();
+        if (n.stmts != null) {
+            indentUp();
+            n.stmts.accept(this);
+            indentDown();
+        }
 
+        printIndent();
         println("}");
         write("}", true);
     }
@@ -114,6 +120,38 @@ public class Unparser extends ASTVisitor {
         if (n.right != null) {
             acceptNode(n.right);
         }
+    }
+
+    public void visit(IfStatementNode n) {
+        printIndent();
+        println("if (" + n.bool + ")");
+        write("");
+        
+        indentUp();
+        n.stmt.accept(this);
+        indentDown();
+    }
+
+    public void visit(ElseStatementNode n) {
+        printIndent();
+        print("else");
+        write("else");
+
+        indentUp();
+        n.stmt.accept(this);
+        indentDown();
+    }
+
+    public void visit(WhileStatementNode n) {
+        printIndent();
+    }
+
+    public void visit(DoWhileStatementNode n) {
+        printIndent();
+    }
+
+    public void visit(BreakStatementNode n) {
+        printIndent();
     }
 
     public void visit(TypeNode n) {

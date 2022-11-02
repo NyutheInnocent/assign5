@@ -62,6 +62,26 @@ public class ASTVisitor {
         // n.left.accept(this);
         // n.right .accept(this);
     }
+
+    public void visit(IfStatementNode n) {
+
+    }
+
+    public void visit(ElseStatementNode n) {
+
+    }
+
+    public void visit(WhileStatementNode n) {
+
+    }
+
+    public void visit(DoWhileStatementNode n) {
+
+    }
+
+    public void visit(BreakStatementNode n) {
+        
+    }
     
     public void visit(TypeNode n) {
 

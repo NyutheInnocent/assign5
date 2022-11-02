@@ -1,5 +1,8 @@
 package assign5.lexer;
 
+/**
+ * @author Chase Dodge
+ */
 public class Type extends Word {
 
     public int width = 0; // Width is used for storage allocation

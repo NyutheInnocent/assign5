@@ -17,6 +17,7 @@ public class Tag {
     public static final int IF = 264;
     public static final int BREAK = 265;
     public static final int BLOCK = 266;
+    public static final int ELSE = 267;
 
     // Operators
     public static final int AND = 366;
@@ -28,4 +29,3 @@ public class Tag {
     public static final int MINUS = 372;
     public static final int TEMP = 373;
 }
-

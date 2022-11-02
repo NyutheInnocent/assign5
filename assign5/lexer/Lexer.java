@@ -17,15 +17,13 @@ public class Lexer {
     private Hashtable<String, Word> words = new Hashtable<>();
 
     public Lexer() {
-        // reserve(new Word(Tag.TRUE,"true"));
-        // reserve(new Word(Tag.FALSE,"false"));
-
         reserve(Word.If);
         reserve(Word.True);
         reserve(Word.False);
         reserve(Word.Do);
         reserve(Word.While);
         reserve(Word.Break);
+        reserve(Word.Else);
 
         reserve(Type.Int);
         reserve(Type.Float);

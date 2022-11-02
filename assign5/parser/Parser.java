@@ -53,10 +53,12 @@ public class Parser extends ASTVisitor {
 
         match('{');
 
-        n.decls = new Declarations();
-        level++;
-        n.decls.accept(this);
-        level--;
+        if (lookahead.tag == Tag.BASIC) {
+            n.decls = new Declarations();
+            level++;
+            n.decls.accept(this);
+            level--;
+        }
 
         n.stmts = new Statements();
         n.stmts.accept(this);
@@ -118,22 +120,87 @@ public class Parser extends ASTVisitor {
                     level++;
                     n.stmts.accept(this);
                     level--;
+
                     break;
                 }
                 case Tag.IF: {
+                    n.stmt = new IfStatementNode();
+                    level++;
+                    ((IfStatementNode)n.stmt).accept(this);
+                    level--;
+
+                    n.stmts = new Statements();
+                    level++;
+                    n.stmts.accept(this);
+                    level--;
+
+                    break;
+                }
+                case Tag.ELSE: {
+                    n.stmt = new ElseStatementNode();
+                    level++;
+                    n.stmt.accept(this);
+                    level--;
+
+                    n.stmts = new Statements();
+                    level++;
+                    n.stmts.accept(this);
+                    level--;
+
                     break;
                 }
                 case Tag.DO: {
+                    n.stmt = new DoWhileStatementNode();
+                    level++;
+                    ((DoWhileStatementNode)n.stmt).accept(this);
+                    level--;
+
+                    n.stmts = new Statements();
+                    level++;
+                    n.stmts.accept(this);
+                    level--;
+
                     break;
                 }
                 case Tag.WHILE: {
+                    n.stmt = new WhileStatementNode();
+                    level++;
+                    ((WhileStatementNode)n.stmt).accept(this);
+                    level--;
+
+                    n.stmts = new Statements();
+                    level++;
+                    n.stmts.accept(this);
+                    level--;
+
                     break;
                 }
                 case Tag.BREAK: {
+                    n.stmt = new BreakStatementNode();
+                    level++;
+                    ((BreakStatementNode)n.stmt).accept(this);
+                    level--;
+
+                    n.stmts = new Statements();
+                    level++;
+                    n.stmts.accept(this);
+                    level--;
+
                     break;
                 }
+                case '{':
                 case Tag.BLOCK: {
+                    n.stmt = new BlockStatementNode();
+                    level++;
+                    ((BlockStatementNode)n.stmt).accept(this);
+                    level--;
 
+                    n.stmts = new Statements();
+                    level++;
+                    n.stmts.accept(this);
+                    level--;
+
+                    break;
                 }
 
                 default: 
@@ -204,6 +271,65 @@ public class Parser extends ASTVisitor {
     // v = 5 - z + 1;
     public void visit(BinaryExprNode n) {
        // Building BinaryExprNode in AssignmentNode so nothing needs to go here.
+    }
+
+    public void visit(IfStatementNode n) {
+        match(Tag.IF);
+        match('(');
+        if (lookahead.tag == Tag.TRUE || lookahead.tag == Tag.FALSE) {
+            n.bool = Boolean.getBoolean(lookahead.toString());
+            match(lookahead.tag);
+        } else {
+            System.out.println("Error: Expected bool value in If statment but got ->" + lookahead.toString());
+        }
+        match(')');
+        
+        n.stmt = new StatementNode();
+        level++;
+        n.stmt.accept(this);
+        level--;
+    }
+
+    public void visit(ElseStatementNode n) {
+        match(Tag.ELSE);
+
+        n.stmt = new StatementNode();
+        level++;
+        n.stmt.accept(this);
+        level--;
+    }
+
+    public void visit(WhileStatementNode n) {
+        match(Tag.WHILE);
+        match('(');
+        if (lookahead.tag == Tag.TRUE || lookahead.tag == Tag.FALSE) {
+            n.bool = Boolean.getBoolean(lookahead.toString());
+            match(lookahead.tag);
+        } else {
+            System.out.println("Error: Expected bool value in If statment but got ->" + lookahead.toString());
+        }
+        match(')');
+
+        n.stmt = new StatementNode();
+        level++;
+        n.stmt.accept(this);
+        level--;
+    }
+
+    public void visit(DoWhileStatementNode n) {
+        match(Tag.DO);
+
+        n.stmt = new StatementNode();
+        level++;
+        n.stmt.accept(this);
+        level--;
+
+        
+    }
+
+    public void visit(BreakStatementNode n) {
+        match(Tag.BREAK);
+        match(';');
     }
 
     // int i ; || int[2] j ;
