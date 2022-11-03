@@ -9,5 +9,9 @@
 
   waffle = 3.14;
 
-  if (input >= 500) { input = 0; } else input = 1;
+  if (input >= 500) { 
+    input = 0; 
+  } 
+  else 
+    input = 1;
 }

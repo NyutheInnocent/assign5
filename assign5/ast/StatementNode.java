@@ -7,7 +7,7 @@ import assign5.visitor.*;
  */
 public class StatementNode extends Node {
 
-    public Statements stmts;
+    public StatementNode stmts;
     public Node stmt;
 
     @Override

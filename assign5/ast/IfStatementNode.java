@@ -10,17 +10,17 @@ import assign5.visitor.*;
 /**
  * @author Chase Dodge
  */
-public class IfStatementNode extends StatementNode {
+public class IfStatementNode extends Statements {
     
     public Word bool;
     public Node id1;
     public Node id2;
-    public StatementNode stmt;
+    public Statements stmts;
 
     public IfStatementNode() { }
-    public IfStatementNode(Word bool, StatementNode stmt) {
+    public IfStatementNode(Word bool, Statements stmts) {
         this.bool = bool;
-        this.stmt = stmt;
+        this.stmts = stmts;
     }
     
     @Override

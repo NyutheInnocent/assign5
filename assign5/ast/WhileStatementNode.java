@@ -10,17 +10,17 @@ import assign5.visitor.*;
 /**
  * @author Chase Dodge
  */
-public class WhileStatementNode extends StatementNode {
+public class WhileStatementNode extends Statements {
     
     public Word bool; 
-    public IdentifierNode id1;
-    public IdentifierNode id2;
-    public StatementNode stmt;
+    public Node id1;
+    public Node id2;
+    public Statements stmts;
 
     public WhileStatementNode() { }
-    public WhileStatementNode(Word bool, StatementNode stmt) {
+    public WhileStatementNode(Word bool, Statements stmt) {
         this.bool = bool;
-        this.stmt = stmt;
+        this.stmt = stmts;
     }
 
     @Override

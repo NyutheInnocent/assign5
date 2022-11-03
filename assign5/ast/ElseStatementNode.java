@@ -1,5 +1,7 @@
 package assign5.ast;
 
+import javax.swing.plaf.nimbus.State;
+
 import assign5.visitor.*;
 
 ////////////////////////////////////////
@@ -9,10 +11,10 @@ import assign5.visitor.*;
 /**
  * @author Chase Dodge
  */
-public class ElseStatementNode extends StatementNode {
+public class ElseStatementNode extends Statements {
     
     public boolean bool;
-    public StatementNode stmt;
+    public Statements stmts;
 
     public ElseStatementNode() { }
     public ElseStatementNode(boolean bool) {

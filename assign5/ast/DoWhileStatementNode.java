@@ -10,17 +10,17 @@ import assign5.visitor.*;
 /**
  * @author Chase Dodge
  */
-public class DoWhileStatementNode extends StatementNode {
+public class DoWhileStatementNode extends Statements {
    
     public Word bool;
     public IdentifierNode id1;
     public IdentifierNode id2;
-    public StatementNode stmt;
+    public Statements stmts;
 
     public DoWhileStatementNode() { }
-    public DoWhileStatementNode(Word bool, StatementNode stmt) {
+    public DoWhileStatementNode(Word bool, Statements stmts) {
         this.bool = bool;
-        this.stmt = stmt;
+        this.stmts = stmts;
     }
 
     @Override

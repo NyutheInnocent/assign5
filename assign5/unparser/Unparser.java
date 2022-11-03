@@ -94,8 +94,8 @@ public class Unparser extends ASTVisitor {
     }
 
     // Superclass for newly introduced stmts
-    public void visit(StatementNode n ) {
-        n.stmt.accept(this);
+    public void visit(StatementNode n) {
+        n.stmts.accept(this);
     }
 
     public void visit(AssignmentNode n) {
@@ -148,9 +148,11 @@ public class Unparser extends ASTVisitor {
         println(")");
         write(")", true);
         
-        indentUp();
-        n.stmt.accept(this);
-        indentDown();
+        if (n.stmts != null) {
+            indentUp();
+            n.stmts.accept(this);
+            indentDown();
+        }
     }
 
     public void visit(ElseStatementNode n) {
@@ -158,15 +160,19 @@ public class Unparser extends ASTVisitor {
         print("else");
         write(addIndent() + "else");
 
-        indentUp();
-        n.stmt.accept(this);
-        indentDown();
+        if (n.stmts != null) {
+            indentUp();
+            n.stmts.accept(this);
+            indentDown();
+        }
     }
 
     public void visit(WhileStatementNode n) {
         printIndent();
         print("while (");
         write(addIndent()  + "while (");
+
+        indentUp();
         if (n.id1 != null) {
             indentUp();
             n.id1.accept(this);
@@ -174,17 +180,18 @@ public class Unparser extends ASTVisitor {
         }
         print(" " + n.bool.lexeme + " ");
         write(" " + n.bool.lexeme + " ");
+
         if (n.id2 != null) {
             indentUp();
             n.id2.accept(this);
             indentDown();
         }
+        indentDown();
         
-
-        if (n.stmt != null) {
+        if (n.stmts != null) {
             println(")");
             write(")", true);
-            n.stmt.accept(this);
+            n.stmts.accept(this);
         } else {
             println(") ;\n");
             write(") ;\n", true);
@@ -196,9 +203,9 @@ public class Unparser extends ASTVisitor {
         println("do");
         write(addIndent() + "do", true);
 
-        indentUp();
-        n.stmt.accept(this);
-        indentDown();
+        if (n.stmts != null) {
+            n.stmts.accept(this);
+        }
     }
 
     public void visit(BreakStatementNode n) {

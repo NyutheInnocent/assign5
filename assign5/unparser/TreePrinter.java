@@ -34,20 +34,39 @@ public class TreePrinter extends ASTVisitor{
         indentUp();
         n.block.accept(this);
         indentDown();
+
+        println("Tree Printer finshed\n");
     }
 
     public void visit(BlockStatementNode n) {
         printIndent(indent);
         println("BlockStatementNode");
 
-        indentUp();
-        n.stmts.accept(this);
-        indentDown();
+        if (n.decls != null) {
+            indentUp();
+            n.decls.accept(this);
+            indentDown();
+        }
+
+        if (n.stmts != null) {
+            indentUp();
+            n.stmts.accept(this);
+            indentDown();
+        }
     }
 
     public void visit(Statements n) {
         if (n.stmts != null) {
             n.stmt.accept(this);
+            n.stmts.accept(this);
+        }
+    }
+
+    public void visit(StatementNode n) {
+        if (n.stmts != null) {
+            indentUp();
+            n.stmt.accept(this);
+            indentDown();
             n.stmts.accept(this);
         }
     }
@@ -59,21 +78,32 @@ public class TreePrinter extends ASTVisitor{
         }
     }
 
+    public void visit(DeclarationNode n) {
+        printIndent(indent);
+        print("DeclarationNode: " + n.type.basic);
+        
+        if (n.type.array != null) {
+            n.type.accept(this);       
+        } else {
+            println("");
+        }
+
+        indentUp();
+        n.id.accept(this);
+        indentDown();
+    }
+
     public void visit(AssignmentNode n) {
         printIndent(indent);
         println("AssignmentNode");
 
         indentUp();
         n.left.accept(this);
-        indentDown();
 
         printIndent(indent);
         println("operator: =");
 
-        indentUp();
-
         acceptNode(n.right);
-
         indentDown();
     }
 
@@ -96,24 +126,29 @@ public class TreePrinter extends ASTVisitor{
         printIndent(indent);
         println("IfStatementNode: " + n.bool.lexeme);
         
-        indentUp();
-        n.stmt.accept(this);
-        indentDown();
+        if (n.stmts != null) {
+            indentUp();
+            n.stmts.accept(this);
+            indentDown();
+        }
     }
 
     public void visit(ElseStatementNode n) {
         printIndent(indent);
-        println("IfElseStatementNode");
+        println("ElseStatementNode");
 
-        indentUp();
-        n.stmt.accept(this);
-        indentDown();
+        if (n.stmts != null) {
+            indentUp();
+            n.stmts.accept(this);
+            indentDown();
+        }
     }
 
     public void visit(WhileStatementNode n) {
         printIndent(indent);
         println("WhileStatementNode: " + n.bool.lexeme);
 
+        indentUp();
         if (n.id1 != null && n.id2 != null) {
             indentUp();
             n.id1.accept(this);
@@ -123,21 +158,20 @@ public class TreePrinter extends ASTVisitor{
             n.id2.accept(this);
             indentDown();
         }
+        indentDown();
 
-        if (n.stmt != null) {
-            indentUp();
-            n.stmt.accept(this);
-            indentDown();
+        if (n.stmts != null) {
+            n.stmts.accept(this);
         }
     }
 
     public void visit(DoWhileStatementNode n) {
         printIndent(indent);
         println("DoWhileStatementNode");
-
-        indentUp();
-        n.stmt.accept(this);
-        indentDown();
+        
+        if (n.stmts != null) {
+            n.stmts.accept(this);
+        }
     }
 
     public void visit(BreakStatementNode n) {
@@ -146,22 +180,16 @@ public class TreePrinter extends ASTVisitor{
     }
 
     public void visit(TypeNode n) {
-        printIndent(indent);
-
         if (n.array != null) {
-            indentUp();
             n.array.accept(this);
-            indentDown();
         }
     }
 
     public void visit(ArrayTypeNode n) {
-        printIndent();
+        println("[" + (n.id == null ? n.size : n.id.id) + "]");
 
         if (n.type != null) {
-            indentUp();
             n.type.accept(this);
-            indentDown();
         }
     }
 
@@ -177,7 +205,13 @@ public class TreePrinter extends ASTVisitor{
 
     public void visit(IdentifierNode n) {
         printIndent(indent);
-        println("IdentifierNode: " + n.id);
+        print("IdentifierNode: " + n.id);
+
+        if (n.array != null) {
+            n.array.accept(this);
+        } else {
+            println("");
+        }
     }
 
     /////////////////////
@@ -231,6 +265,13 @@ public class TreePrinter extends ASTVisitor{
     void printIndent(String indent) {
         String s = "";
         for (int i = 0; i < indent_level; i++) {
+            s += indent;
+        }
+        print(s);
+    }
+    void printIndent(String indent, int j) {
+        String s = "";
+        for (int i = 0; i < indent_level - j; i++) {
             s += indent;
         }
         print(s);

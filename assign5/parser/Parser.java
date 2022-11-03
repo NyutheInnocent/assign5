@@ -209,110 +209,6 @@ public class Parser extends ASTVisitor {
         }
     }
 
-    // public void visit(StatementNode n) {
-    //     if (!lookahead.toString().equals("}")) {
-
-    //         // Check if lookahead.tag is ID | IF | WHILE | DO | BREAK | BLOCK
-    //         switch (lookahead.tag) {
-    //             case Tag.ID: {
-    //                 n.stmt = new AssignmentNode();
-    //                 level++;
-    //                 ((AssignmentNode)n.stmt).accept(this);
-    //                 level--;
-
-    //                 n.stmts = new StatementNode();
-    //                 level++;
-    //                 n.stmts.accept(this);
-    //                 level--;
-
-    //                 break;
-    //             }
-    //             case Tag.IF: {
-    //                 n.stmt = new IfStatementNode();
-    //                 level++;
-    //                 ((IfStatementNode)n.stmt).accept(this);
-    //                 level--;
-
-    //                 n.stmts = new StatementNode();
-    //                 level++;
-    //                 n.stmts.accept(this);
-    //                 level--;
-
-    //                 break;
-    //             }
-    //             case Tag.ELSE: {
-    //                 n.stmt = new ElseStatementNode();
-    //                 level++;
-    //                 ((ElseStatementNode)n.stmt).accept(this);
-    //                 level--;
-
-    //                 n.stmts = new StatementNode();
-    //                 level++;
-    //                 n.stmts.accept(this);
-    //                 level--;
-
-    //                 break;
-    //             }
-    //             case Tag.DO: {
-    //                 n.stmt = new DoWhileStatementNode();
-    //                 level++;
-    //                 ((DoWhileStatementNode)n.stmt).accept(this);
-    //                 level--;
-
-    //                 n.stmts = new StatementNode();
-    //                 level++;
-    //                 n.stmts.accept(this);
-    //                 level--;
-
-    //                 break;
-    //             }
-    //             case Tag.WHILE: {
-    //                 n.stmt = new WhileStatementNode();
-    //                 level++;
-    //                 ((WhileStatementNode)n.stmt).accept(this);
-    //                 level--;
-
-    //                 n.stmts = new StatementNode();
-    //                 level++;
-    //                 n.stmts.accept(this);
-    //                 level--;
-
-    //                 break;
-    //             }
-    //             case Tag.BREAK: {
-    //                 n.stmt = new BreakStatementNode();
-    //                 level++;
-    //                 ((BreakStatementNode)n.stmt).accept(this);
-    //                 level--;
-
-    //                 n.stmts = new StatementNode();
-    //                 level++;
-    //                 n.stmts.accept(this);
-    //                 level--;
-
-    //                 break;
-    //             }
-    //             case '{':
-    //             case Tag.BLOCK: {
-    //                 n.stmt = new BlockStatementNode();
-    //                 level++;
-    //                 ((BlockStatementNode)n.stmt).accept(this);
-    //                 level--;
-
-    //                 n.stmts = new StatementNode();
-    //                 level++;
-    //                 n.stmts.accept(this);
-    //                 level--;
-
-    //                 break;
-    //             }
-
-    //             default: 
-    //                 break;
-    //         }
-    //     }
-    // }
-
     public void visit(AssignmentNode n) {
         // printIndentation();
         // println("AssignmentNode");
@@ -451,19 +347,47 @@ public class Parser extends ASTVisitor {
         match(Tag.WHILE);
         match('(');
 
-        if (lookahead.tag == Tag.ID) {
-            n.id1 = new IdentifierNode();
-            level++;
-            n.id1.accept(this);
-            level--;
+        if (lookahead.tag == Tag.ID || lookahead.tag == Tag.INT || lookahead.tag == Tag.FLOAT) {
+            if (lookahead.tag == Tag.ID) {
+                n.id1 = new IdentifierNode();
+                level++;
+                ((IdentifierNode)n.id1).accept(this);
+                level--;
+            }
+            else if (lookahead.tag == Tag.INT) {
+                n.id1 = new IntNode();
+                level++;
+                ((IntNode)n.id1).accept(this);
+                level--;
+            }
+            else {
+                n.id1 = new FloatNode();
+                level++;
+                ((FloatNode)n.id1).accept(this);
+                level--;
+            }
 
             n.bool = ((Word)lookahead);
             match(lookahead.tag);
-
-            n.id2 = new IdentifierNode();
-            level++;
-            n.id2.accept(this);
-            level--;
+            
+            if (lookahead.tag == Tag.ID) {
+                n.id2 = new IdentifierNode();
+                level++;
+                ((IdentifierNode)n.id2).accept(this);
+                level--;
+            }
+            else if (lookahead.tag == Tag.INT) {
+                n.id2 = new IntNode();
+                level++;
+                ((IntNode)n.id2).accept(this);
+                level--;
+            }
+            else {
+                n.id2 = new FloatNode();
+                level++;
+                ((FloatNode)n.id2).accept(this);
+                level--;
+            }
         } else if (lookahead.tag == Tag.TRUE || lookahead.tag == Tag.FALSE) {
             n.bool = ((Word)lookahead);
             match(lookahead.tag);

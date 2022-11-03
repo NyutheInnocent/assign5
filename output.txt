@@ -4,6 +4,27 @@
   float v ;
   float x ;
   float[100] a ;
-  while (as > fs) ;
+  while (as > fs)
+  {
+    do
+    i = i + 1.0001 ;
+    while (a[i] < v) ;
 
+    do
+    j = j - 1 ;
+    while (a[j] > v) ;
+
+    if (i >= j)
+      break ;
+
+      x = a[i] ;
+      a[i] = a[j] ;
+      a[j] = x ;
+  }
+waffle = 3.1399999 ;
+if (input >= 500)
+  {
+    input = 0 ;
+  }
+else  input = 1 ;
 }
