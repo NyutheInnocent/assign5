@@ -13,8 +13,8 @@ import assign5.visitor.*;
 public class IfStatementNode extends StatementNode {
     
     public Word bool;
-    public IdentifierNode id1;
-    public IdentifierNode id2;
+    public Node id1;
+    public Node id2;
     public StatementNode stmt;
 
     public IfStatementNode() { }

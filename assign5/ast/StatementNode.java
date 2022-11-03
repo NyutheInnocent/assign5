@@ -7,6 +7,9 @@ import assign5.visitor.*;
  */
 public class StatementNode extends Node {
 
+    public Statements stmts;
+    public Node stmt;
+
     @Override
     public void accept(ASTVisitor visitor) {
         visitor.visit(this);

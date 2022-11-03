@@ -16,6 +16,7 @@ public class Unparser extends ASTVisitor {
     public Parser parser = null;
     StringBuilder fileContent = new StringBuilder();
     int lineNumber = 1;
+    int indent = 0;
 
     public Unparser() { }
     public Unparser(Parser parser) {
@@ -47,7 +48,7 @@ public class Unparser extends ASTVisitor {
     public void visit(BlockStatementNode n) {
         printIndent();
         println("{");
-        write("{", true);
+        write(addIndent() + "{", true);
 
         if (n.decls != null) {
             indentUp();
@@ -63,12 +64,11 @@ public class Unparser extends ASTVisitor {
 
         printIndent();
         println("}");
-        write("}", true);
+        write(addIndent() + "}", true);
     }
 
     public void visit(Declarations n) {
         if (n.decls != null) {
-            write(addIndent());
             n.decl.accept(this);
             n.decls.accept(this);
         }
@@ -76,16 +76,18 @@ public class Unparser extends ASTVisitor {
 
     public void visit(DeclarationNode n) {
         n.type.accept(this);
+
         print(" ");
         write(" ");
+
         n.id.accept(this);
+
         println(" ;");
         write(" ;", true);
     }
 
     public void visit(Statements n) {
         if (n.stmts != null) {
-            write(addIndent());
             n.stmt.accept(this);
             n.stmts.accept(this);
         }
@@ -93,16 +95,24 @@ public class Unparser extends ASTVisitor {
 
     // Superclass for newly introduced stmts
     public void visit(StatementNode n ) {
-    
+        n.stmt.accept(this);
     }
 
     public void visit(AssignmentNode n) {
         printIndent();
+        write(addIndent());
+
+        indentUp();
         n.left.accept(this);
+        indentDown();
+
         print(" = ");
         write(" = ");
 
+        indentUp();
         n.right.accept(this);
+        indentDown();
+
         println(" ;");
         write(" ;", true);
     }
@@ -125,22 +135,18 @@ public class Unparser extends ASTVisitor {
     public void visit(IfStatementNode n) {
         printIndent();
         print("if (");
-        write("if (");
+        write(addIndent() + "if (");
         if (n.id1 != null) {
-            indentUp();
             n.id1.accept(this);
-            indentDown();
         }
         print(" " + n.bool.lexeme + " ");
         write(" " + n.bool.lexeme + " ");
         if (n.id2 != null) {
-            indentUp();
             n.id2.accept(this);
-            indentDown();
         }
 
         println(")");
-        write(")");
+        write(")", true);
         
         indentUp();
         n.stmt.accept(this);
@@ -150,7 +156,7 @@ public class Unparser extends ASTVisitor {
     public void visit(ElseStatementNode n) {
         printIndent();
         print("else");
-        write("else");
+        write(addIndent() + "else");
 
         indentUp();
         n.stmt.accept(this);
@@ -160,7 +166,7 @@ public class Unparser extends ASTVisitor {
     public void visit(WhileStatementNode n) {
         printIndent();
         print("while (");
-        write("while (");
+        write(addIndent()  + "while (");
         if (n.id1 != null) {
             indentUp();
             n.id1.accept(this);
@@ -177,20 +183,18 @@ public class Unparser extends ASTVisitor {
 
         if (n.stmt != null) {
             println(")");
-            write(")");
-            indentUp();
+            write(")", true);
             n.stmt.accept(this);
-            indentDown();
         } else {
-            println(") ;");
-            write(") ;");
+            println(") ;\n");
+            write(") ;\n", true);
         }
     }
 
     public void visit(DoWhileStatementNode n) {
         printIndent();
         println("do");
-        write("do");
+        write(addIndent() + "do", true);
 
         indentUp();
         n.stmt.accept(this);
@@ -199,14 +203,14 @@ public class Unparser extends ASTVisitor {
 
     public void visit(BreakStatementNode n) {
         printIndent();
-        println("break ;");
-        write("break ;");
+        println("break ;\n");
+        write(addIndent() + "break ;\n", true);
     }
 
     public void visit(TypeNode n) {
         printIndent();
         print(n.basic.toString());
-        write(n.basic.toString());
+        write(addIndent() + n.basic.toString());
 
         if (n.array != null) {
             n.array.accept(this);
@@ -274,8 +278,6 @@ public class Unparser extends ASTVisitor {
     void printSpace() {
         System.out.print(" ");
     }
-
-    int indent = 0;
 
     void indentUp() {
         indent++;

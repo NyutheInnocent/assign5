@@ -5,7 +5,7 @@ import assign5.visitor.*;
 /**
  * @author Chase Dodge
  */
-public class AssignmentNode extends Node{
+public class AssignmentNode extends StatementNode{
     public IdentifierNode left;
     public Node right;
 
